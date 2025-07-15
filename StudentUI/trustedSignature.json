@@ -1,0 +1,7 @@
+{
+  "trustedMAC": "d8:5d:e2:f3:7d:79",
+  "trustedRFID": {
+    "vendorId": "ffff",
+    "productId": "0035"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "rfid-app",
+  "version": "1.0.0",
+  "description": "RFID Card Reader Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "csv-parser": "^3.2.0",
+    "csv-writer": "^1.6.0",
+    "electron": "^24.0.0",
+    "serialport": "^13.0.0",
+    "usb": "^2.15.0",
+    "xlsx": "^0.18.5"
+  },
+  "keywords": [
+    "rfid",
+    "excel",
+    "electron",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "ISC"
+}
