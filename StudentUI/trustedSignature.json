@@ -3,5 +3,6 @@
   "trustedRFID": {
     "vendorId": "ffff",
     "productId": "0035"
-  }
+  },
+  "trustedIPPrefix": "10.106."
 }

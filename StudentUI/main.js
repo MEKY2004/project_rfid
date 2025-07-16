@@ -14,7 +14,7 @@ function getRFIDFingerprintViaUSB() {
   const devices = usb.getDeviceList()
   devices.forEach((device, index) => {
     const desc = device.deviceDescriptor
-    console.log(`🔍 Device ${index + 1}: Vendor=${desc.idVendor.toString(16)}, Product=${desc.idProduct.toString(16)}`)
+    console.log(`Device ${index + 1}: Vendor=${desc.idVendor.toString(16)}, Product=${desc.idProduct.toString(16)}`)
   })
 
     const reader = devices.find(d => {
@@ -57,23 +57,23 @@ app.whenReady().then(async () => {
   const trusted = JSON.parse(fs.readFileSync(trustedPath, "utf8"))
 
   function validateEnvironment() {
-    const trustedIP = trusted.trustedIP?.trim().toLowerCase()
+    const trustedIPPrefix = trusted.trustedIPPrefix?.trim().toLowerCase()
     const macMatch = currentMAC.toLowerCase() === trusted.trustedMAC.toLowerCase()
     const readerMatch = fingerprintRFID.vendorId?.toLowerCase() === trusted.trustedRFID.vendorId &&
                         fingerprintRFID.productId?.toLowerCase() === trusted.trustedRFID.productId
     const currentIP = getCurrentIPAddress()?.toLowerCase()
-    const ipMatch = currentIP === trustedIP
+    const ipMatch = currentIP?.startsWith(trustedIPPrefix)
 
     environmentTrusted = macMatch && readerMatch && ipMatch
 
     if (!environmentTrusted) {
       console.warn("Untrusted environment detected!")
-      console.warn(`📌 MAC match: ${macMatch}`)
-      console.warn(`📌 RFID match: ${readerMatch}`)
-      console.warn(`📌 IP match: ${ipMatch}`)
+      console.warn(`MAC match: ${macMatch}`)
+      console.warn(`RFID match: ${readerMatch}`)
+      console.warn(`IP match: ${ipMatch}`)
       // Block sensitive features as needed
     } else {
-      console.log("✅ Trusted MAC, RFID, and IP match.")
+      console.log("Trusted MAC, RFID, and IP match.")
     }
   }
   validateEnvironment()
@@ -104,9 +104,9 @@ function getCurrentIPAddress() {
 
 // 📍 Map IP to physical location
 function getLocationFromIP(ipAddress) {
-  if (ipAddress.startsWith("10.106.60.")) {
+  if (ipAddress.startsWith("10.106.56")) {
     const lastOctet = parseInt(ipAddress.split(".")[3], 10)
-    if (lastOctet >= 70 && lastOctet <= 175) return "Thành Thái"
+    if (lastOctet >= 70 && lastOctet <= 200) return "Thành Thái"
   }
   if (ipAddress === "192.168.1.55") return "Lyn Coffee"
   return "Unknown"
@@ -255,7 +255,7 @@ ipcMain.handle("matchCard", async (event, cardNumber) => {
             }
           }
         } else {
-          console.log("✅ Already checked in and out today")
+          console.log("Already checked in and out today")
           return {
             found: true,
             data: { ...student, currentIP, detectedLocation: currentLocation },
@@ -308,7 +308,7 @@ ipcMain.handle("matchCard", async (event, cardNumber) => {
 const { google } = require("googleapis")
 const path = require("path")
 
-/*async function readSheetFromRow4() {
+async function readSheetFromRow4() {
   const auth = new google.auth.GoogleAuth({
     keyFile: path.join(__dirname, "credentials.json"), 
     scopes: ["https://www.googleapis.com/auth/spreadsheets"]
@@ -327,12 +327,12 @@ const path = require("path")
 
   const rows = res.data.values
   if (!rows || rows.length === 0) {
-    console.log("📭 No data found.")
+    console.log("No data found.")
     return
   }
 
   rows.forEach((row, index) => {
-    console.log(`📄 Row ${index + 4}:`, row)
+    console.log(`Row ${index + 4}:`, row)
   })
 }
 
@@ -382,7 +382,7 @@ async function updateSheetRow(mssv, date, updatedRow) {
       }
     })
   }
-}*/
+}
 
 //Retrieve all log entries
 ipcMain.handle("getAllLogs", async () => {
